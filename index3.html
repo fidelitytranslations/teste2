@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedbacks Recebidos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .feedback-list-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        .feedback-list-container h2 {
+            margin-bottom: 20px;
+        }
+
+        .feedback-list-container ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .feedback-list-container li {
+            background-color: #001f3f; /* Azul marinho */
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: left;
+            color: #fff; /* Letra branca */
+        }
+
+        .feedback-list-container button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .feedback-list-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .pagination {
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            padding: 5px 10px;
+            background-color: #007BFF;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+
+        .pagination a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
+            const feedbackList = document.getElementById('feedback-list');
+            const pagination = document.getElementById('pagination');
+            const itemsPerPage = 10;
+            let currentPage = 1;
+
+            function displayFeedbacks(page) {
+                feedbackList.innerHTML = '';
+                const startIndex = (page - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const currentFeedbacks = feedbacks.slice(startIndex, endIndex);
+                currentFeedbacks.forEach(feedback => {
+                    const li = document.createElement('li');
+                    li.textContent = feedback;
+                    feedbackList.appendChild(li);
+                });
+            }
+
+            function displayPagination() {
+                pagination.innerHTML = '';
+                const pageCount = Math.ceil(feedbacks.length / itemsPerPage);
+                for (let i = 1; i <= pageCount; i++) {
+                    const pageLink = document.createElement('a');
+                    pageLink.href = '#';
+                    pageLink.textContent = i;
+                    pageLink.addEventListener('click', () => {
+                        currentPage = i;
+                        displayFeedbacks(currentPage);
+                    });
+                    pagination.appendChild(pageLink);
+                }
+            }
+
+            displayFeedbacks(currentPage);
+            if (feedbacks.length > itemsPerPage) {
+                displayPagination();
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="feedback-list-container">
+        <h2>Feedbacks Recebidos</h2>
+        <ul id="feedback-list"></ul>
+        <div class="pagination" id="pagination"></div>
+        <a href="index.html"><button>Voltar</button></a>
+    </div>
+</body>
+</html>
